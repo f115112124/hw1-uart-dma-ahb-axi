@@ -1,0 +1,7 @@
+VCD info: dumpfile tb_ahb.vcd opened for output.
+CHECK AHB INCR4 write/read, waits, local response backpressure
+CHECK AHB DMA TX serial bytes HW1!; CPU and DMA share bus
+CHECK AHB DMA RX serial bytes RX4! written to memory
+CHECK AHB unmapped/reserved/readonly ERROR, malformed shape, 1 KiB boundaries
+PASS tb_ahb: waits=561 BUSY=130 bursts=44 errors=5 contention_cycles=32 CPU=84 DMA=2 accepted=213
+..\sim\tb_ahb.sv:203: $finish called at 16530000 (1ps)

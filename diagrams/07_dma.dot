@@ -1,0 +1,28 @@
+digraph G {
+graph [rankdir=TB, bgcolor="transparent", pad="0.18", nodesep="0.35", ranksep="0.45", fontname="Arial"];
+node [shape=box, style="rounded,filled", color="#90AABD", fillcolor="#EAF2FA", fontcolor="#142B49", fontname="Arial", fontsize=12, margin="0.14,0.10"];
+edge [color="#087F8C", fontcolor="#264960", fontname="Arial", fontsize=10, arrowsize=0.7];
+
+start [shape=point,width=0.1,label=""];
+IDLE [label="D_IDLE\nwait for START"];
+TX_CMD [label="D_TX_CMD\nread memory command"];
+TX_RSP [label="D_TX_RSP\nwait for read result"];
+TX_LAUNCH [label="D_TX_LAUNCH\nlaunch one UART byte"];
+TX_WAIT [label="D_TX_WAIT\nwait for full 8N1 frame"];
+RX_COLLECT [label="D_RX_COLLECT\npop LEN bytes from FIFO"];
+RX_CMD [label="D_RX_CMD\nwrite memory command"];
+RX_RSP [label="D_RX_RSP\nwait for write result"];
+start -> IDLE [label="reset"];
+IDLE -> TX_CMD [label="START, direction=0"];
+TX_CMD -> TX_RSP [label="cmd handshake"];
+TX_RSP -> TX_LAUNCH [label="response OK"];
+TX_RSP -> IDLE [label="error; done/error=1"];
+TX_LAUNCH -> TX_WAIT [label="TX idle: launch"];
+TX_WAIT -> TX_LAUNCH [label="tx_done; more bytes"];
+TX_WAIT -> IDLE [label="last tx_done; done=1"];
+IDLE -> RX_COLLECT [label="START, direction=1"];
+RX_COLLECT -> RX_CMD [label="collected LEN bytes"];
+RX_CMD -> RX_RSP [label="cmd handshake"];
+RX_RSP -> IDLE [label="response; done=1\nerror if bus failed"];
+
+}

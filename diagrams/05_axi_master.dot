@@ -1,0 +1,27 @@
+digraph G {
+graph [rankdir=TB, bgcolor="transparent", pad="0.18", nodesep="0.35", ranksep="0.45", fontname="Arial"];
+node [shape=box, style="rounded,filled", color="#90AABD", fillcolor="#EAF2FA", fontcolor="#142B49", fontname="Arial", fontsize=12, margin="0.14,0.10"];
+edge [color="#087F8C", fontcolor="#264960", fontname="Arial", fontsize=10, arrowsize=0.7];
+
+start [shape=point,width=0.1,label=""];
+M_IDLE [label="M_IDLE\ncmd_ready=1"];
+M_READ_ADDR [label="M_READ_ADDR\nARVALID=1"];
+M_READ_DATA [label="M_READ_DATA\nRREADY=1\ncollect expected beats"];
+M_WRITE_SEND [label="M_WRITE_SEND\nAW + W progress independently\naw_done / w_done flags"];
+M_WRITE_RESP [label="M_WRITE_RESP\nBREADY=1"];
+M_RESPONSE [label="M_RESPONSE\nhold rsp_valid / data / error"];
+start -> M_IDLE [label="reset"];
+M_IDLE -> M_READ_ADDR [label="valid read cmd"];
+M_IDLE -> M_WRITE_SEND [label="valid write cmd"];
+M_IDLE -> M_RESPONSE [label="bad cmd",style=dashed,color="#B65C44",fontcolor="#B65C44"];
+M_READ_ADDR -> M_READ_ADDR [label="!ARREADY"];
+M_READ_ADDR -> M_READ_DATA [label="AR handshake"];
+M_READ_DATA -> M_READ_DATA [label="wait / accepted non-last beat"];
+M_READ_DATA -> M_RESPONSE [label="final R handshake"];
+M_WRITE_SEND -> M_WRITE_SEND [label="AW / W not all accepted"];
+M_WRITE_SEND -> M_WRITE_RESP [label="aw_done && w_done"];
+M_WRITE_RESP -> M_RESPONSE [label="B handshake"];
+M_RESPONSE -> M_RESPONSE [label="!rsp_ready"];
+M_RESPONSE -> M_IDLE [label="rsp handshake"];
+
+}

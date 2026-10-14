@@ -1,0 +1,24 @@
+digraph G {
+graph [rankdir=TB, bgcolor="transparent", pad="0.18", nodesep="0.35", ranksep="0.45", fontname="Arial"];
+node [shape=box, style="rounded,filled", color="#90AABD", fillcolor="#EAF2FA", fontcolor="#142B49", fontname="Arial", fontsize=12, margin="0.14,0.10"];
+edge [color="#087F8C", fontcolor="#264960", fontname="Arial", fontsize=10, arrowsize=0.7];
+
+start [shape=point,width=0.1,label=""];
+S_IDLE [label="S_IDLE\nHREADYOUT=1"];
+S_EXEC [label="S_EXEC\nHREADYOUT=0\nreg_valid until accepted"];
+S_OK [label="S_OK\nHREADYOUT=1 / OKAY"];
+S_ERR1 [label="S_ERR1\nHREADYOUT=0 / ERROR",fillcolor="#FBE9E7"];
+S_ERR2 [label="S_ERR2\nHREADYOUT=1 / ERROR",fillcolor="#FBE9E7"];
+start -> S_IDLE;
+S_IDLE -> S_EXEC [label="accepted supported address\nlatch address + controls"];
+S_IDLE -> S_ERR1 [label="accepted bad size / alignment"];
+S_EXEC -> S_EXEC [label="endpoint not ready"];
+S_EXEC -> S_OK [label="reg_valid && reg_ready\nno error: latch result once"];
+S_EXEC -> S_ERR1 [label="endpoint error"];
+S_ERR1 -> S_ERR2 [label="next cycle"];
+S_OK -> S_EXEC [label="next selected valid address"];
+S_OK -> S_IDLE [label="no next address"];
+S_ERR2 -> S_EXEC [label="next selected valid address"];
+S_ERR2 -> S_IDLE [label="no next address"];
+
+}

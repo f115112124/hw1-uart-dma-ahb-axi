@@ -1,0 +1,27 @@
+digraph G {
+graph [rankdir=TB, bgcolor="transparent", pad="0.18", nodesep="0.35", ranksep="0.45", fontname="Arial"];
+node [shape=box, style="rounded,filled", color="#90AABD", fillcolor="#EAF2FA", fontcolor="#142B49", fontname="Arial", fontsize=12, margin="0.14,0.10"];
+edge [color="#087F8C", fontcolor="#264960", fontname="Arial", fontsize=10, arrowsize=0.7];
+
+start [shape=point, width=0.1, label=""];
+M_IDLE [label="M_IDLE\ncmd_ready=1"];
+M_REQ [label="M_REQ\nHBUSREQ=1"];
+M_ADDR [label="M_ADDR\nNONSEQ / SEQ + address"];
+M_DATA [label="M_DATA\nread / write current beat"];
+M_ERR2 [label="M_ERR2\nfinish ERROR response", fillcolor="#FBE9E7"];
+M_RSP [label="M_RSP\nhold local response"];
+start -> M_IDLE; M_IDLE -> M_REQ [label="valid local command"];
+M_IDLE -> M_RSP [label="invalid local command\nlocal error"];
+M_REQ -> M_REQ [label="not granted"];
+M_REQ -> M_ADDR [label="HGRANT && HREADY"];
+M_ADDR -> M_ADDR [label="!HREADY"];
+M_ADDR -> M_DATA [label="HREADY: address accepted"];
+M_DATA -> M_DATA [label="!HREADY && OKAY"];
+M_DATA -> M_ADDR [label="HREADY && OKAY\nmore beats"];
+M_DATA -> M_RSP [label="HREADY && OKAY\nlast beat"];
+M_DATA -> M_ERR2 [label="ERROR first cycle"];
+M_ERR2 -> M_RSP [label="ERROR second cycle"];
+M_RSP -> M_RSP [label="!rsp_ready"];
+M_RSP -> M_IDLE [label="rsp_valid && rsp_ready"];
+
+}

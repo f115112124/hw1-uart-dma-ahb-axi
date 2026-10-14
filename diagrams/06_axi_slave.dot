@@ -1,0 +1,28 @@
+digraph G {
+graph [rankdir=TB, bgcolor="transparent", pad="0.18", nodesep="0.35", ranksep="0.45", fontname="Arial"];
+node [shape=box, style="rounded,filled", color="#90AABD", fillcolor="#EAF2FA", fontcolor="#142B49", fontname="Arial", fontsize=12, margin="0.14,0.10"];
+edge [color="#087F8C", fontcolor="#264960", fontname="Arial", fontsize=10, arrowsize=0.7];
+
+start [shape=point,width=0.1,label=""];
+S_IDLE [label="S_IDLE\nchoose read or write"];
+S_READ_EXEC [label="S_READ_EXEC\nreg_valid: get one word"];
+S_READ_RESP [label="S_READ_RESP\nRVALID=1; hold data / response"];
+S_WRITE_COLLECT [label="S_WRITE_COLLECT\nAW latch + W buffer\nindependent handshakes"];
+S_WRITE_EXEC [label="S_WRITE_EXEC\nreg_valid: write one word"];
+S_WRITE_RESP [label="S_WRITE_RESP\nBVALID=1; hold BRESP"];
+start -> S_IDLE [label="reset"];
+S_IDLE -> S_READ_EXEC [label="AR handshake"];
+S_IDLE -> S_WRITE_COLLECT [label="write request"];
+S_READ_EXEC -> S_READ_EXEC [label="!reg_ready"];
+S_READ_EXEC -> S_READ_RESP [label="endpoint accepted / shape error"];
+S_READ_RESP -> S_READ_RESP [label="!RREADY"];
+S_READ_RESP -> S_READ_EXEC [label="R handshake; more beats"];
+S_READ_RESP -> S_IDLE [label="last R handshake"];
+S_WRITE_COLLECT -> S_WRITE_COLLECT [label="collect AW / W"];
+S_WRITE_COLLECT -> S_WRITE_EXEC [label="AW + all expected W captured"];
+S_WRITE_EXEC -> S_WRITE_EXEC [label="wait / more endpoint beats"];
+S_WRITE_EXEC -> S_WRITE_RESP [label="all writes processed"];
+S_WRITE_RESP -> S_WRITE_RESP [label="!BREADY"];
+S_WRITE_RESP -> S_IDLE [label="B handshake"];
+
+}

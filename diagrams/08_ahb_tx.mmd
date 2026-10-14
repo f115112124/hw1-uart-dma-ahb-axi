@@ -1,0 +1,18 @@
+sequenceDiagram
+    participant A0 as CPU (M0)
+    participant A1 as IP CSR (S1)
+    participant A2 as DMA (M1)
+    participant A3 as Memory (S0)
+    participant A4 as UART
+    A0->>A1: SINGLE writes: SRC=0x100, LEN=4, CTRL=1
+    A1-->>A0: Each write: HREADY=1, HRESP=OKAY
+    A1->>A2: START memory-to-UART
+    A2->>A3: HBUSREQ; wait for granted ownership
+    A2->>A3: Read INCR4: NONSEQ A0, then 3 x SEQ
+    A3-->>A2: HREADY=0 inserts wait; hold current phase
+    A3-->>A2: 4 accepted read data beats
+    A2->>A4: Send low bytes: H, W, 1, ! (8N1)
+    A4-->>A2: Final stop bit completed
+    A2->>A1: DMA_DONE=1
+    A0->>A1: SINGLE read STATUS
+    A1-->>A0: DONE=1, BUSY=0, ERROR=0

@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant A0 as CPU (M0)
+    participant A1 as IP CSR (S1)
+    participant A2 as DMA (M1)
+    participant A3 as Memory (S0)
+    participant A4 as UART
+    A0->>A1: CSR writes: DST=0x200, LEN=4, CTRL=3
+    A1->>A2: START UART-to-memory
+    A4->>A2: Receive 4 bytes into RX FIFO
+    A2->>A3: AW: ADDR=0x200, LEN=3, SIZE=2, INCR
+    A2->>A3: W beats 0..2; each WVALID && WREADY
+    A2->>A3: W beat 3: WLAST=1
+    A3-->>A2: B: wait until AW + all W beats complete
+    A2->>A3: Accept B with BVALID && BREADY
+    A2->>A1: DMA_DONE=1 if BRESP=OKAY
+    A0->>A3: Read back destination with AR / R
+    A3-->>A0: Verify 4 received bytes

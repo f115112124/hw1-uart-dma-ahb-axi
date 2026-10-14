@@ -1,0 +1,1 @@
+..\rtl\uart_dma.sv:65: warning: @* is sensitive to all 8 words in array 'rx_fifo'.

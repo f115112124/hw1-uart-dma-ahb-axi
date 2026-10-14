@@ -1,0 +1,12 @@
+digraph G {
+graph [rankdir=LR, bgcolor="transparent", pad="0.18", nodesep="0.35", ranksep="0.45", fontname="Arial"];
+node [shape=box, style="rounded,filled", color="#90AABD", fillcolor="#EAF2FA", fontcolor="#142B49", fontname="Arial", fontsize=12, margin="0.14,0.10"];
+edge [color="#087F8C", fontcolor="#264960", fontname="Arial", fontsize=10, arrowsize=0.7];
+
+subgraph cluster_cpu { label="Master 0"; color="#D2DEE9"; cpu [label="CPU BFM"]; cm [label="Master wrapper"]; cpu -> cm; }
+subgraph cluster_ip { label="UART + DMA IP"; color="#D2DEE9"; regs [label="Slave wrapper + CSR"]; dma [label="DMA engine"]; dm [label="Master wrapper (M1)"]; uart [label="UART TX / RX + FIFO"]; regs -> dma [label="START"]; dma -> dm; dma -> uart [dir=both]; }
+bus [label="2-master / 2-slave interconnect\nRound-robin arbitration", fillcolor="#DDF1EF"];
+mem [label="Slave wrapper + memory controller\n4 KiB RAM model (S0)"];
+cm -> bus; dm -> bus; bus -> mem; bus -> regs [label="S1"];
+
+}

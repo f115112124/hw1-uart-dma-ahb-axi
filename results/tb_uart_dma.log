@@ -1,0 +1,10 @@
+VCD info: dumpfile tb_uart_dma.vcd opened for output.
+PASS: bad CSR, alignment, invalid LEN and invalid START
+PASS: DMA TX4 reads words and serializes HW1! including stop bits
+PASS: UART RX4 collects RX4! and writes four words after command backpressure
+PASS: RX FIFO buffers before START and drains in arrival order
+PASS: DMA TX single-word command
+PASS: DMA read response error terminates with sticky error
+PASS: DMA write response error propagates to STATUS
+UART_DMA ALL TESTS PASSED (941 assertions, 6 commands, 5 UART TX frames)
+..\sim\tb_uart_dma.sv:263: $finish called at 13250000 (1ps)

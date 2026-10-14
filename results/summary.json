@@ -1,0 +1,61 @@
+{
+  "simulator": "Icarus Verilog version 12.0 (devel) (s20150603-1539-g2693dd32b)",
+  "executed_at_utc_plus_8": "2026-10-15T02:00:04.946975+08:00",
+  "tests": [
+    {
+      "testbench": "tb_uart_dma",
+      "passed": true,
+      "returncode": 0,
+      "elapsed_seconds": 0.09,
+      "pass_lines": [
+        "PASS: bad CSR, alignment, invalid LEN and invalid START",
+        "PASS: DMA TX4 reads words and serializes HW1! including stop bits",
+        "PASS: UART RX4 collects RX4! and writes four words after command backpressure",
+        "PASS: RX FIFO buffers before START and drains in arrival order",
+        "PASS: DMA TX single-word command",
+        "PASS: DMA read response error terminates with sticky error",
+        "PASS: DMA write response error propagates to STATUS",
+        "UART_DMA ALL TESTS PASSED (941 assertions, 6 commands, 5 UART TX frames)"
+      ]
+    },
+    {
+      "testbench": "tb_ahb",
+      "passed": true,
+      "returncode": 0,
+      "elapsed_seconds": 0.126,
+      "pass_lines": [
+        "PASS tb_ahb: waits=561 BUSY=130 bursts=44 errors=5 contention_cycles=32 CPU=84 DMA=2 accepted=213"
+      ]
+    },
+    {
+      "testbench": "tb_axi",
+      "passed": true,
+      "returncode": 0,
+      "elapsed_seconds": 0.157,
+      "pass_lines": [
+        "PASS AXI four-beat memory transfers with endpoint wait states",
+        "PASS AXI independent AW/W and R/B backpressure stability",
+        "PASS AXI invalid shape/4KB, full-burst DECERR and SLVERR",
+        "PASS AXI CPU/DMA simultaneous requests, round robin and UART TX HW1!",
+        "PASS AXI UART RX4! DMA burst writeback with W handshake before AW",
+        "AXI ALL TESTS PASSED: assertions=332 cycles=1134 Rbeats=128 Wbeats=22 AWfirst=9 Wfirst=4 contests=1 grants=115/2"
+      ]
+    }
+  ],
+  "source_sha256": {
+    "rtl/ahb_interconnect.sv": "1be1d36ed2b5c9fdc60af915ee7fd9c07d525c3609c44c079ca9b66eda26ff5e",
+    "rtl/ahb_master.sv": "49840de5873889e9a4965963291695d1fab916c3ce98ff1aabd184a583e7fb9d",
+    "rtl/ahb_memory.sv": "62e1efa92e7631bd774905fd5859aca042ced268a0b6f87c588f2e863bc48342",
+    "rtl/ahb_slave.sv": "cb2725603baa14887528f37f61fac5d370ce475347a8ba47e6cedc1df87a7f8b",
+    "rtl/axi_interconnect.sv": "40af003802eeea32da290b02d12fe1e61156b2094f4db0a3f63d8e8323c960ae",
+    "rtl/axi_master.sv": "aa05cad4f96c2dc7d9dc004c13973ec3e6680bc2aa9fe84d0903aa0c80a5da8a",
+    "rtl/axi_memory.sv": "185b730275108bfcee79691e07ece25d0ee901d498f5ec5cb3c39beb61423920",
+    "rtl/axi_slave.sv": "4e525fba6dd4adb6901dc1c25d9d5153d39538c426b5c5b718679981113ff9a8",
+    "rtl/uart_dma.sv": "c732668b5f9034c73df5779a9b00dab270d5f482d4a31faeb63a178f9ba3cd4b",
+    "sim/tb_ahb.sv": "5ed5aebe4b86fa604a1de91769aecb444110d1dad545834afe1046cab93c16b3",
+    "sim/tb_axi.sv": "3bdfd033c9bc502ab3ce1650144174dabdb07c41aa3f67ff0b7fc94c66c2c3fc",
+    "sim/tb_uart_dma.sv": "3d1d2fd3aef587d9a0d4ba939b5eef1d6c7c6fdd3bf845f6b4a57f2b627e9212",
+    "sim/run_all.py": "8a6c47e8a301cf1de40159cc6e228f47ff735c7afb744b5765ee0817e4de4c05"
+  },
+  "all_passed": true
+}

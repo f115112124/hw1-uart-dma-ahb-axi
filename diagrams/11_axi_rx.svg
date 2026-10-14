@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="688" viewBox="0 0 900 688">
+<defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#087F8C"/></marker></defs>
+<rect x="4.0" y="5" width="132" height="40" rx="8" fill="#EAF2FA" stroke="#90AABD"/>
+<text x="70.0" y="30" text-anchor="middle" font-family="Arial" font-size="15" fill="#142B49">CPU (M0)</text>
+<line x1="70.0" y1="45" x2="70.0" y2="678" stroke="#AEBBC9" stroke-dasharray="5 5"/>
+<rect x="194.0" y="5" width="132" height="40" rx="8" fill="#EAF2FA" stroke="#90AABD"/>
+<text x="260.0" y="30" text-anchor="middle" font-family="Arial" font-size="15" fill="#142B49">IP CSR (S1)</text>
+<line x1="260.0" y1="45" x2="260.0" y2="678" stroke="#AEBBC9" stroke-dasharray="5 5"/>
+<rect x="384.0" y="5" width="132" height="40" rx="8" fill="#EAF2FA" stroke="#90AABD"/>
+<text x="450.0" y="30" text-anchor="middle" font-family="Arial" font-size="15" fill="#142B49">DMA (M1)</text>
+<line x1="450.0" y1="45" x2="450.0" y2="678" stroke="#AEBBC9" stroke-dasharray="5 5"/>
+<rect x="574.0" y="5" width="132" height="40" rx="8" fill="#EAF2FA" stroke="#90AABD"/>
+<text x="640.0" y="30" text-anchor="middle" font-family="Arial" font-size="15" fill="#142B49">Memory (S0)</text>
+<line x1="640.0" y1="45" x2="640.0" y2="678" stroke="#AEBBC9" stroke-dasharray="5 5"/>
+<rect x="764.0" y="5" width="132" height="40" rx="8" fill="#EAF2FA" stroke="#90AABD"/>
+<text x="830.0" y="30" text-anchor="middle" font-family="Arial" font-size="15" fill="#142B49">UART</text>
+<line x1="830.0" y1="45" x2="830.0" y2="678" stroke="#AEBBC9" stroke-dasharray="5 5"/>
+<line x1="70.0" y1="80" x2="260.0" y2="80" stroke="#087F8C" stroke-width="1.6" marker-end="url(#arrow)"/>
+<text x="165.0" y="70" text-anchor="middle" font-family="Arial" font-size="14" fill="#142B49">CSR writes: DST=0x200, LEN=4, CTRL=3</text>
+<line x1="260.0" y1="133" x2="450.0" y2="133" stroke="#087F8C" stroke-width="1.6" marker-end="url(#arrow)"/>
+<text x="355.0" y="123" text-anchor="middle" font-family="Arial" font-size="14" fill="#142B49">START UART-to-memory</text>
+<line x1="830.0" y1="186" x2="450.0" y2="186" stroke="#087F8C" stroke-width="1.6" marker-end="url(#arrow)"/>
+<text x="640.0" y="176" text-anchor="middle" font-family="Arial" font-size="14" fill="#142B49">Receive 4 bytes into RX FIFO</text>
+<line x1="450.0" y1="239" x2="640.0" y2="239" stroke="#087F8C" stroke-width="1.6" marker-end="url(#arrow)"/>
+<text x="545.0" y="229" text-anchor="middle" font-family="Arial" font-size="14" fill="#142B49">AW: ADDR=0x200, LEN=3, SIZE=2, INCR</text>
+<line x1="450.0" y1="292" x2="640.0" y2="292" stroke="#087F8C" stroke-width="1.6" marker-end="url(#arrow)"/>
+<text x="545.0" y="282" text-anchor="middle" font-family="Arial" font-size="14" fill="#142B49">W beats 0..2; each WVALID &amp;&amp; WREADY</text>
+<line x1="450.0" y1="345" x2="640.0" y2="345" stroke="#087F8C" stroke-width="1.6" marker-end="url(#arrow)"/>
+<text x="545.0" y="335" text-anchor="middle" font-family="Arial" font-size="14" fill="#142B49">W beat 3: WLAST=1</text>
+<line x1="640.0" y1="398" x2="450.0" y2="398" stroke="#087F8C" stroke-width="1.6" marker-end="url(#arrow)" stroke-dasharray="6 4"/>
+<text x="545.0" y="388" text-anchor="middle" font-family="Arial" font-size="14" fill="#142B49">B: wait until AW + all W beats complete</text>
+<line x1="450.0" y1="451" x2="640.0" y2="451" stroke="#087F8C" stroke-width="1.6" marker-end="url(#arrow)"/>
+<text x="545.0" y="441" text-anchor="middle" font-family="Arial" font-size="14" fill="#142B49">Accept B with BVALID &amp;&amp; BREADY</text>
+<line x1="450.0" y1="504" x2="260.0" y2="504" stroke="#087F8C" stroke-width="1.6" marker-end="url(#arrow)"/>
+<text x="355.0" y="494" text-anchor="middle" font-family="Arial" font-size="14" fill="#142B49">DMA_DONE=1 if BRESP=OKAY</text>
+<line x1="70.0" y1="557" x2="640.0" y2="557" stroke="#087F8C" stroke-width="1.6" marker-end="url(#arrow)"/>
+<text x="355.0" y="547" text-anchor="middle" font-family="Arial" font-size="14" fill="#142B49">Read back destination with AR / R</text>
+<line x1="640.0" y1="610" x2="70.0" y2="610" stroke="#087F8C" stroke-width="1.6" marker-end="url(#arrow)" stroke-dasharray="6 4"/>
+<text x="355.0" y="600" text-anchor="middle" font-family="Arial" font-size="14" fill="#142B49">Verify 4 received bytes</text>
+</svg>

@@ -1,0 +1,16 @@
+digraph G {
+graph [rankdir=LR, bgcolor="transparent", pad="0.18", nodesep="0.35", ranksep="0.45", fontname="Arial"];
+node [shape=box, style="rounded,filled", color="#90AABD", fillcolor="#EAF2FA", fontcolor="#142B49", fontname="Arial", fontsize=12, margin="0.14,0.10"];
+edge [color="#087F8C", fontcolor="#264960", fontname="Arial", fontsize=10, arrowsize=0.7];
+
+FREE [label="A_IDLE\nchoose pending request"];
+M0 [label="A_M0\nCPU owns bus"];
+M1 [label="A_M1\nDMA owns bus"];
+FREE -> M0 [label="M0 only / RR chooses M0"];
+FREE -> M1 [label="M1 only / RR chooses M1"];
+M0 -> FREE [label="M0 done, no M1 request"];
+M1 -> FREE [label="M1 done, no M0 request"];
+M0 -> M1 [label="M0 done, M1 pending"];
+M1 -> M0 [label="M1 done, M0 pending"];
+
+}

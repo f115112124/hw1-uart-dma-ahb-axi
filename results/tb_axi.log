@@ -1,0 +1,9 @@
+VCD info: dumpfile tb_axi.vcd opened for output.
+PASS AXI four-beat memory transfers with endpoint wait states
+PASS AXI independent AW/W and R/B backpressure stability
+PASS AXI invalid shape/4KB, full-burst DECERR and SLVERR
+PASS AXI CPU/DMA simultaneous requests, round robin and UART TX HW1!
+PASS AXI UART RX4! DMA burst writeback with W handshake before AW
+AXI ALL TESTS PASSED: assertions=332 cycles=1134 Rbeats=128 Wbeats=22 AWfirst=9 Wfirst=4 contests=1 grants=115/2
+AXI backpressure cycles: R=6 B=6 W=11 endpoint=156
+..\sim\tb_axi.sv:251: $finish called at 11390000 (1ps)
