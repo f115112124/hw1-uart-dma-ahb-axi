@@ -1,21 +1,21 @@
 # HW1：UART＋DMA 的 AHB／AXI4 介面設計
 
-先開啟 [完整作業 PDF](HW1_report.pdf)。需要修改文字時，使用 [報告 Markdown 版](docs/HW1_report.md)。
+可以先看 [完整作業 PDF](HW1_report.pdf)。如果要修改文字，可以用 [報告 Markdown 版](docs/HW1_report.md)。
 
-本專案包含作業的兩題，以及 RTL／模擬加分項。圖稿、報告、原始碼與實際測試紀錄均保留在下方資料夾。
+這裡整理了 HW1 的兩題，以及 RTL 和模擬的加分內容。圖稿、報告、原始碼和測試紀錄都放在這個資料夾裡。
 
 ## 這個範例在做什麼
 
-CPU 設定 UART＋DMA 的暫存器後，DMA 自動搬移資料。提供相同功能的 AHB、AXI4 兩個版本：
+CPU 先設定 UART＋DMA 的暫存器，再讓 DMA 自動搬移資料。這個範例有 AHB 和 AXI4 兩個版本，做的事情相同：
 
 - 傳送：DMA 從記憶體讀取四個 word，再由 UART 逐字元送出 `HW1!`。
 - 接收：UART 收到 `RX4!`，DMA 將四個 byte 寫回四個記憶體 word。
 
-每個 32-bit word 的低 8 bits 放一個字元，其餘 bits 為 0。此教學資料格式不做四個 byte 合併成一個 word。
+每個 32-bit word 的低 8 bits 放一個字元，其餘 bits 都是 0。為了讓資料比較好看懂，這裡每個 word 只放一個字元，沒有把四個 byte 合併成一個 word。
 
 ![系統架構](diagrams/01_architecture.svg)
 
-CPU 與 DMA 是兩個 Master；記憶體控制器與 IP 控制暫存器是兩個 Slave。CPU 以測試平台的 bus-functional model（BFM）產生要求，並非完整處理器 RTL。
+CPU 和 DMA 是兩個 Master；記憶體控制器和 IP 控制暫存器是兩個 Slave。模擬中的 CPU 用測試平台的 bus-functional model（BFM）送出讀寫要求，沒有實作完整的處理器 RTL。
 
 ## 作業內容對照
 
@@ -31,17 +31,17 @@ CPU 與 DMA 是兩個 Master；記憶體控制器與 IP 控制暫存器是兩個
 | AXI Message Sequence Chart | `diagrams/10_axi_tx.svg`、`diagrams/11_axi_rx.svg` |
 | 加分 RTL／simulation | `rtl/`、`sim/`、`results/` |
 
-FSM 圖保留可編輯的 `.dot` 原稿，MSC 保留 `.mmd` Mermaid 原稿。SVG 可放大檢視，適合放入報告。
+FSM 圖有可編輯的 `.dot` 原稿，MSC 則有 `.mmd` Mermaid 原稿。SVG 圖片可以放大看，也可以放進報告。
 
 ## 執行模擬
 
-需要 Python 3 和 Icarus Verilog（`iverilog`、`vvp`）。在這個資料夾執行：
+先安裝 Python 3 和 Icarus Verilog（`iverilog`、`vvp`），再到這個資料夾執行：
 
 ```text
 python sim/run_all.py
 ```
 
-Windows 若沒有將模擬器放入 PATH，可設定：
+Windows 如果找不到模擬器，可以先設定它的路徑：
 
 ```powershell
 $env:IVERILOG = 'C:\iverilog\bin\iverilog.exe'
@@ -49,36 +49,36 @@ $env:VVP = 'C:\iverilog\bin\vvp.exe'
 python sim/run_all.py
 ```
 
-程式會編譯並執行 `tb_uart_dma`、`tb_ahb`、`tb_axi`。失敗會回傳非零結束碼，細節保存在 `results/`：
+程式會編譯並執行 `tb_uart_dma`、`tb_ahb`、`tb_axi` 這三組測試。如果測試失敗，程式會回傳非零結束碼。詳細結果會放在 `results/`：
 
-- `tb_*.log`：各測試平台的實際輸出。
+- `tb_*.log`：每組測試的實際輸出。
 - `tb_*_compile.log`：編譯訊息。
 - `tb_*.vcd`：完整波形，可用 GTKWave 開啟。
 - `summary.json`：執行時間、成功／失敗、模擬器版本、原始碼 SHA-256。
-- `build/`：重新產生的模擬執行檔，可忽略，不是原始碼。
+- `build/`：模擬時產生的執行檔，下次執行會重新產生，不需要當成原始碼保存。
 
-要從 VCD 更新波形預覽，可執行 `python sim/plot_vcd.py`。這個步驟只需 Python 標準函式庫，不影響 RTL 測試結果。
+如果要用 VCD 更新波形預覽，可以執行 `python sim/plot_vcd.py`。這個步驟只用到 Python 標準函式庫，不會改變 RTL 測試結果。
 
 ## 介面與設計說明
 
-- [共同介面契約](docs/interface_contract.md)
+- [模組之間怎麼接](docs/interface_contract.md)
 - [AHB 設計與測試](docs/ahb_notes.md)
 - [AXI4 設計與測試](docs/axi_notes.md)
 - [UART＋DMA 核心設計與測試](docs/uart_notes.md)
 
-記憶體位址為 `0x00000000` 至 `0x00000FFF`，UART＋DMA 已實作暫存器範圍為 `0x40000000` 至 `0x400000FF`。AHB 的 IP 解碼配置為 1 KiB，其中未實作 offset 回覆 ERROR；AXI 的 IP 配置為 256 bytes。
+記憶體使用 `0x00000000` 到 `0x00000FFF`，UART＋DMA 的暫存器使用 `0x40000000` 到 `0x400000FF`。AHB 會把 1 KiB 的位址範圍分配給這個 IP；如果存取的 offset 沒有對應的暫存器，就回覆 ERROR。AXI 分配給這個 IP 的範圍則是 256 bytes。
 
-## 範圍
+## 這個範例支援到哪裡
 
-這是自撰的課堂教學實作，使用固定 32-bit、對齊、1／4-beat 交易。一次只路由一筆交易，在交易邊界做 round-robin 仲裁。AHB 不含 SPLIT／RETRY／LOCK；AXI 不含 WRAP、窄傳輸、非對齊、多筆 outstanding 和 out-of-order。RAM endpoint 為簡化記憶體控制器，不含外部 DRAM PHY。
+這是供課堂使用的範例，資料寬度固定為 32-bit，位址需要對齊，每筆交易傳 1 或 4 個 beat。匯流排一次處理一筆交易，完成後用 round-robin 決定下一個由哪個 Master 使用。AHB 沒有加入 SPLIT／RETRY／LOCK；AXI 沒有加入 WRAP、窄傳輸、非對齊、多筆 outstanding 和 out-of-order。記憶體控制器也做了簡化，使用 RAM 模型，沒有外部 DRAM PHY。
 
-UART 為固定參數 8N1，沒有 parity、流量控制、中斷與可程式化 baud rate。RX FIFO 深度為 8 bytes；DMA RX 等待接收足夠 byte 後才搬移。這份 RTL 未做 FPGA 板級驗證或正式協定相容性認證。
+UART 固定使用 8N1，沒有 parity、流量控制或中斷，baud rate 也不能透過暫存器調整。RX FIFO 可以放 8 bytes；DMA 接收時會先等足夠的 byte 收齊，再開始搬移。這份 RTL 做了模擬測試，還沒有放到 FPGA 板上驗證，也沒有經過正式的協定相容性認證。
 
 ## 參考資料
 
 - [Arm AMBA Specification Rev 2.0 / IHI 0011A](https://documentation-service.arm.com/static/5f916403f86e16515cdc3d71)
 - [Arm AMBA AXI and ACE Protocol Specification / IHI 0022H](https://developer.arm.com/-/media/Arm%20Developer%20Community/PDF/IHI0022H_amba_axi_protocol_spec.pdf)
-- [OpenCores UART16550](https://opencores.org/projects/uart16550)：UART IP 類型參考。本作業沒有使用其 RTL，也不宣稱 16550 暫存器相容。
+- [OpenCores UART16550](https://opencores.org/projects/uart16550)：用來參考 UART IP 的類型。這份作業沒有使用它的 RTL，暫存器設計也沒有做成與 16550 相容。
 - [Icarus Verilog 官方文件](https://steveicarus.github.io/iverilog/)
 
-照片沒有明訂協定版本、圖數或全部選配功能；本範例已明列版本與子集，供依課堂要求檢視和調整。
+作業照片沒有寫明協定版本、圖的張數或需要哪些選配功能，所以這裡把採用的版本和支援範圍列出來，方便對照課堂要求調整。
